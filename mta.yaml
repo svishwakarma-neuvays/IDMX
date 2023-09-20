@@ -3,64 +3,75 @@ ID: IDMX
 description: A simple CAP project.
 version: 1.0.0
 modules:
-- name: IDMX-srv
-  type: nodejs
-  path: gen/srv
-  requires:
-  - name: IDMX-db
-  provides:
-  - name: srv-api
-    properties:
-      srv-url: ${default-url}
-  parameters:
-    buildpack: nodejs_buildpack
-  build-parameters:
-    builder: npm
-- name: IDMX-db-deployer
-  type: hdb
-  path: db
-  requires:
-  - name: IDMX-db
-    properties:
-      TARGET_CONTAINER: ~{hdi-container-name}
-  parameters:
-    buildpack: nodejs_buildpack
+  - name: IDMX-srv
+    type: nodejs
+    path: gen/srv
+    requires:
+      - name: IDMX-db
+    provides:
+      - name: srv-api
+        properties:
+          srv-url: ${default-url}
+    parameters:
+      buildpack: nodejs_buildpack
+    build-parameters:
+      builder: npm
+  - name: IDMX-db-deployer
+    type: hdb
+    path: db
+    requires:
+      - name: IDMX-db
+        properties:
+          TARGET_CONTAINER: ~{hdi-container-name}
+      - name: cross-container-service-13
+        group: SERVICE_REPLACEMENTS
+        properties:
+          key: ServiceName_1
+          service: ~{the-service-name}
+    parameters:
+      buildpack: nodejs_buildpack
 resources:
-- name: IDMX-db
-  type: com.sap.xs.hdi-container
-  parameters:
-    service: hana
-    service-plan: hdi-shared
-  properties:
-    hdi-container-name: ${service-name}
-- name: cross-container-service-1
-  type: deleteme
-- name: cross-container-service-2
-  type: deleteme
-- name: cross-container-service-3
-  type: deleteme
-- name: cross-container-service-4
-  type: deleteme
-- name: cross-container-service-5
-  type: deleteme
-- name: cross-container-service-6
-  type: deleteme
-- name: cross-container-service-7
-  type: deleteme
-- name: cross-container-service-8
-  type: deleteme
-- name: cross-container-service-9
-  type: deleteme
-- name: cross-container-service-10
-  type: deleteme
-- name: cross-container-service-11
-  type: deleteme
-- name: cross-container-service-12
-  type: deleteme
+  - name: IDMX-db
+    type: com.sap.xs.hdi-container
+    parameters:
+      service: hana
+      service-plan: hdi-shared
+    properties:
+      hdi-container-name: ${service-name}
+  - name: cross-container-service-1
+    type: deleteme
+  - name: cross-container-service-2
+    type: deleteme
+  - name: cross-container-service-3
+    type: deleteme
+  - name: cross-container-service-4
+    type: deleteme
+  - name: cross-container-service-5
+    type: deleteme
+  - name: cross-container-service-6
+    type: deleteme
+  - name: cross-container-service-7
+    type: deleteme
+  - name: cross-container-service-8
+    type: deleteme
+  - name: cross-container-service-9
+    type: deleteme
+  - name: cross-container-service-10
+    type: deleteme
+  - name: cross-container-service-11
+    type: deleteme
+  - name: cross-container-service-12
+    type: deleteme
+  - name: cross-container-service-13
+    type: org.cloudfoundry.existing-service
+    parameters:
+      service-name: IDMX-hdiIDMX-db-deployer-ws-k8mcf
+    properties:
+      the-service-name: ${service-name}
 parameters:
   enable-parallel-deployments: true
 build-parameters:
   before-all:
-  - builder: custom
-    commands:
-    - npx cds build --production
+    - builder: custom
+      commands:
+        - npx cds build --production

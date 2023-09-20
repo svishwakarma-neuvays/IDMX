@@ -10,6 +10,7 @@ class services extends cds.ApplicationService {
             let result = await SELECT.from(material);
             return result;
         })
+        
         this.on('READ', 'materialWriteData', async (req) => {
             let approvedata = [
                 {
