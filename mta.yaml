@@ -18,12 +18,12 @@ modules:
       builder: npm
   - name: IDMX-db-deployer
     type: hdb
-    path: db
+    path: gen/db
     requires:
       - name: IDMX-db
         properties:
           TARGET_CONTAINER: ~{hdi-container-name}
-      - name: cross-container-service-13
+      - name: cross-container-service-15
         group: SERVICE_REPLACEMENTS
         properties:
           key: ServiceName_1
@@ -63,6 +63,10 @@ resources:
   - name: cross-container-service-12
     type: deleteme
   - name: cross-container-service-13
+    type: deleteme
+  - name: cross-container-service-14
+    type: deleteme
+  - name: cross-container-service-15
     type: org.cloudfoundry.existing-service
     parameters:
       service-name: IDMX-hdiIDMX-db-deployer-ws-k8mcf
